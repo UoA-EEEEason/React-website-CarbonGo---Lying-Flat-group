@@ -20,7 +20,7 @@ export default function LoginView() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [currentUser, setCurrentUser] = useState(null); // 新增状态，用于跟踪当前用户
+  const [currentUser, setCurrentUser] = useState(null); 
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -30,23 +30,23 @@ export default function LoginView() {
       const userRef = firestore.collection('user').doc(user.uid);
       const doc = await userRef.get();
       if (doc.exists && doc.data().role === 'web') {
-        setCurrentUser(user); // 设置当前用户
+        setCurrentUser(user);
       } else {
         console.log('User role is not web, logging out...');
         await auth.signOut();
-        setCurrentUser(null); // 登出并重置用户
+        setCurrentUser(null);
       }
     } catch (error) {
       console.error("Error signing in: ", error);
       alert(`Login failed: ${error.message}`);
-      setCurrentUser(null); // 登录失败，重置用户
+      setCurrentUser(null);
     }
   };
 
   const handleLogout = async () => {
     try {
       await auth.signOut();
-      setCurrentUser(null); // 登出并重置用户
+      setCurrentUser(null);
     } catch (error) {
       console.error("Error signing out: ", error);
     }
