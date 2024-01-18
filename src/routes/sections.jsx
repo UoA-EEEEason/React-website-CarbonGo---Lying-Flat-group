@@ -13,6 +13,17 @@ export default function Router() {
   const routes = useRoutes([
     {
       element: (
+          <Suspense>
+            <Outlet />
+          </Suspense>
+      ),
+      children: [
+        { element: <LoginPage />, index: true },
+      ],
+    },
+    {
+      path: 'dashboard',
+      element: (
         <DashboardLayout>
           <Suspense>
             <Outlet />
