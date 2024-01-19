@@ -96,7 +96,11 @@ export default function ProductsView() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Product</Typography>      </Stack>
+        <Typography variant="h4">Tree</Typography> 
+        <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
+          New Tree
+        </Button>
+      </Stack>
         <Card>
         <ProductsTableToolbar></ProductsTableToolbar>
         
@@ -114,7 +118,7 @@ export default function ProductsView() {
                   { id: 'name', label: 'Name' },
                   { id: 'company', label: 'Price' },
                   { id: 'treeNumber', label: 'Number' },
-                  { id: 'treeUrl',label:'TreeUrl' },
+                  { id: 'treeUrl',label:'Image Url' },
                   { id: 'discription', label: 'Discription' },
               
                 ]}
