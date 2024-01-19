@@ -3,18 +3,21 @@ import { forwardRef } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
-
+import Typography from '@mui/material/Typography';
 import { RouterLink } from 'src/routes/components';
 
 // ----------------------------------------------------------------------
 
 const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
-    const logo = (
-    <Box
-      component="img"
-      src="/assets/logo.svg"
-      sx={{ width: 40, height: 40, cursor: 'pointer', ...sx }}
-    />
+  const logo = (
+    <Box sx={{ display: 'flex', alignItems: 'center', ...sx }} ref={ref}>
+      <Box
+        component="img"
+        src="/assets/logo.svg"
+        sx={{ width: 40, height: 40, cursor: 'pointer' }}
+      />
+      <Typography variant="h6" sx={{ ml: 5, color: 'green' }}>Lying Flat</Typography>
+    </Box>
   );
 
   if (disabledLink) {
