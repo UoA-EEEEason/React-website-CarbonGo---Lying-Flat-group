@@ -11,10 +11,9 @@ import { alpha, useTheme } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useRouter } from 'src/routes/hooks';
 import { bgGradient } from 'src/theme/css';
-import { auth, firestore } from 'src/firebaseConfig';
 import Iconify from 'src/components/iconify';
-import Logo from 'src/components/logo';
 import CircularProgress from '@mui/material/CircularProgress';
+import { checkUserStatus, handleLogin, handleLogout } from '../../firebase/auth';
 
 export default function LoginView() {
   const theme = useTheme();
@@ -27,26 +26,8 @@ export default function LoginView() {
   const [loadingAuthState, setLoadingAuthState] = useState(true);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  const checkUserStatus = () => {
-    return auth.onAuthStateChanged(async user => {
-      if (user) {
-        const userRef = firestore.collection('user').doc(user.uid);
-        const doc = await userRef.get();
-        if (doc.exists && doc.data().role === 'web') {
-          setCurrentUser(user);
-        } else {
-          await auth.signOut();
-          setCurrentUser(null);
-        }
-      } else {
-        setCurrentUser(null);
-      }
-      setLoadingAuthState(false);
-    });
-  };
-
   useEffect(() => {
-    const unsubscribe = checkUserStatus();
+    const unsubscribe = checkUserStatus(setCurrentUser, setLoadingAuthState);
     return () => {
       if (unsubscribe) {
         unsubscribe();
@@ -60,29 +41,13 @@ export default function LoginView() {
     }
   }, [currentUser, loadingAuthState]);
 
-  const handleLogin = async (event) => {
+  const handleFormLogin = async (event) => {
     event.preventDefault();
-    setIsLoggingIn(true);
-    try {
-      await auth.signInWithEmailAndPassword(email, password);
-      router.push('/dashboard');
-    } catch (error) {
-      console.error("Error signing in: ", error);
-      alert(`Login failed: ${error.message}`);
-    }
-    setIsLoggingIn(false);
-  };
-
-  const handleLogout = async () => {
-    try {
-      await auth.signOut();
-    } catch (error) {
-      console.error("Error signing out: ", error);
-    }
+    await handleLogin(email, password, setIsLoggingIn, router);
   };
 
   const renderForm = (
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleFormLogin}>
       <Stack spacing={3}>
         <TextField
           name="email"
