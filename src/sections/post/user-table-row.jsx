@@ -13,6 +13,8 @@ import IconButton from '@mui/material/IconButton';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
+import { fDateTime } from 'src/utils/format-time';
+
 // ----------------------------------------------------------------------
 
 export default function UserTableRow({
@@ -54,7 +56,7 @@ export default function UserTableRow({
           <Label color={(role === 'News' && 'error') || 'success'}>{role}</Label>
         </TableCell>
 
-        <TableCell>{date}</TableCell>
+        <TableCell>{fDateTime(date)}</TableCell>
 
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
