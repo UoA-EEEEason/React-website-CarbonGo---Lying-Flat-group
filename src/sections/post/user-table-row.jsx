@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { useRouter } from 'src/routes/hooks';
+
 import Stack from '@mui/material/Stack';
 import Popover from '@mui/material/Popover';
 import TableRow from '@mui/material/TableRow';
@@ -14,10 +16,12 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
 import { fDateTime } from 'src/utils/format-time';
+import { truncateText } from 'src/utils/helps';
 
 // ----------------------------------------------------------------------
 
 export default function UserTableRow({
+  id,
   selected,
   title,
   content,
@@ -35,6 +39,11 @@ export default function UserTableRow({
     setOpen(null);
   };
 
+  const router = useRouter();
+  const handleEditPost = () => {
+    router.push('/edit-post', { id: id, Role: role });
+  }
+
   return (
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
@@ -50,7 +59,7 @@ export default function UserTableRow({
           </Stack>
         </TableCell>
 
-        <TableCell>{content}</TableCell>
+        <TableCell>{truncateText(content, 50)}</TableCell>
 
         <TableCell>
           <Label color={(role === 'News' && 'error') || 'success'}>{role}</Label>
@@ -75,7 +84,7 @@ export default function UserTableRow({
           sx: { width: 140 },
         }}
       >
-        <MenuItem onClick={handleCloseMenu}>
+        <MenuItem onClick={handleEditPost}>
           <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
           Edit
         </MenuItem>
@@ -90,6 +99,7 @@ export default function UserTableRow({
 }
 
 UserTableRow.propTypes = {
+  id: PropTypes.any,
   content: PropTypes.any,
   handleClick: PropTypes.func,
   title: PropTypes.any,
