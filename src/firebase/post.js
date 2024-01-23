@@ -1,4 +1,4 @@
-import { firestore } from '../firebaseConfig';
+import { firestore,storage } from '../firebaseConfig';
 import { serverTimestamp } from "firebase/firestore";
 
 export const handleNewMessage = async (title, content) => {
@@ -9,22 +9,48 @@ export const handleNewMessage = async (title, content) => {
             content: content,
             createdAt: serverTimestamp(),
         })
-        alert('Message added successfully');
+        // alert('Message added successfully');
       } catch (error) {
         console.error('Error adding message: ', error);
       }
 }
 
-export const handleNewNews = async (title, content) => {
+export const handleNewNews = async (title, content, imageUrl) => {
     const messageRef = firestore.collection('news');
     try {
         messageRef.add({
             title: title,
             content: content,
+            image: imageUrl,
             createdAt: serverTimestamp(),
         })
-        alert('News added successfully');
+        // alert('News added successfully');
       } catch (error) {
         console.error('Error adding news: ', error);
       }
 }
+
+export const handleUpload = (file, callback) => {
+  if (file) {
+    const uploadTask = storage.ref(`images/${file.name}`).put(file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Optional: Handle upload progress
+      },
+      (error) => {
+        // Optional: Handle upload errors
+        console.error("Upload error:", error);
+      },
+      () => {
+        //Operation after upload is completed
+        storage.ref("images").child(file.name).getDownloadURL().then(url => {
+          console.log("File available at", url);
+          callback(url);
+          // You can save the URL here, or perform other operations
+        });
+      }
+    );
+  }
+};
