@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import FormControl from '@mui/material/FormControl';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
@@ -19,20 +16,53 @@ import Snackbar from '@mui/material/Snackbar';
 
 import InputFileUpload from 'src/components/upload';
 
-import { postNewMessage, postNews } from 'src/firebase/post';
+import { updateNews, updateMessage, getNewsById, getMessageById } from 'src/firebase/post';
 
-export default function NewPostView() {
+export default function EditPostView() {
+  const location = useLocation();
+  const { id, Role } = location.state;
+
   const theme = useTheme();
   const router = useRouter();
 
+  const [role, setRole] = useState('News');
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [role, setRole] = useState('');
   const [image, setImage] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertSeverity, setAlertSeverity] = useState('error');
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        let data;
+
+        if (Role === 'News') {
+          data = await getNewsById(id);
+        } else if (Role === 'Message') {
+          data = await getMessageById(id);
+        } else {
+          console.error("Unknown Role:", Role);
+          return;
+        }
+
+        if (data && data.title && data.content) {
+          setTitle(data.title);
+          setContent(data.content);
+          setRole(Role);
+        } else {
+          console.error("Data is null or missing required properties.");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchData();
+  }, [id, Role]);
+
 
   const showAlert = (message, severity = 'error') => {
     setAlertMessage(message);
@@ -43,35 +73,21 @@ export default function NewPostView() {
     setAlertMessage(null);
   };
 
-  const handleChange = (event) => {
-    setRole(event.target.value);
-  };
-
   const handleFileUpload = (url) => {
     setImage(url);
-    setIsFileUploaded(true);
-    showAlert('File uploaded successfully!','success');
+    showAlert('File uploaded successfully!', 'success');
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!role) {
-      showAlert('Please select a role before submitting.');
-      return;
-    }
-
-    if (!isFileUploaded && (role === 'News') ) {
-      showAlert('Please upload a file before submitting.');
-      return;
-    }
 
     setIsLoggingIn(true);
     if (role === 'Message') {
-      await postNewMessage(title, content);
-      showAlert('Message added successfully','success');
+      await updateMessage(id, title, content);
+      showAlert('Message update successfully', 'success');
     } else if (role === 'News') {
-      await postNews(title, content, image);
-      showAlert('News added successfully','success');
+      await updateNews(id, title, content, image);
+      showAlert('News update successfully', 'success');
     }
     setIsLoggingIn(false);
   };
@@ -91,19 +107,12 @@ export default function NewPostView() {
           onChange={(e) => setTitle(e.target.value)}
         />
 
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Role</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={role}
-            label="Role"
-            onChange={handleChange}
-          >
-            <MenuItem value={'News'}>News</MenuItem>
-            <MenuItem value={'Message'}>Message</MenuItem>
-          </Select>
-        </FormControl>
+        <TextField
+          name="role"
+          label="Role"
+          value={role}
+          variant="outlined"
+        />
 
         <TextField
           name="content"
@@ -115,7 +124,7 @@ export default function NewPostView() {
           onChange={(e) => setContent(e.target.value)}
         />
 
-        <InputFileUpload onFileUpload={handleFileUpload}/>
+        <InputFileUpload onFileUpload={handleFileUpload} />
       </Stack>
 
       <LoadingButton
@@ -162,7 +171,7 @@ export default function NewPostView() {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4" sx={{ mt: 2, mb: 5 }}>Create a new post</Typography>
+          <Typography variant="h4" sx={{ mt: 2, mb: 5 }}>Edit the {Role==='News'?'News':'Message'}</Typography>
 
           {renderForm}
 
