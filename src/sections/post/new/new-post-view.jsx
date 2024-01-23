@@ -14,6 +14,10 @@ import { alpha, useTheme } from '@mui/material/styles';
 import { useRouter } from 'src/routes/hooks';
 import { bgGradient } from 'src/theme/css';
 import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+
+import InputFileUpload from 'src/components/upload';
 
 import { handleNewMessage, handleNewNews } from 'src/firebase/post';
 
@@ -26,22 +30,46 @@ export default function NewPostView() {
   const [role, setRole] = useState('');
   const [image, setImage] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isFileUploaded, setIsFileUploaded] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [alertSeverity, setAlertSeverity] = useState('error');
+
+  const showAlert = (message, severity = 'error') => {
+    setAlertMessage(message);
+    setAlertSeverity(severity);
+  };
+
+  const handleCloseAlert = () => {
+    setAlertMessage(null);
+  };
 
   const handleChange = (event) => {
     setRole(event.target.value);
   };
 
+  const handleFileUpload = (url) => {
+    setImage(url);
+    setIsFileUploaded(true);
+    showAlert('File uploaded successfully!','success');
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!role) {
-      alert('Please select a role before submitting.');
+      showAlert('Please select a role before submitting.');
       return;
     }
+
+    if (!isFileUploaded && (role === 'News') ) {
+      showAlert('Please upload a file before submitting.');
+      return;
+    }
+
     setIsLoggingIn(true);
     if (role === 'Message') {
       await handleNewMessage(title, content);
     } else if (role === 'News') {
-      await handleNewNews(title, content);
+      await handleNewNews(title, content, image);
     }
     setIsLoggingIn(false);
   };
@@ -76,14 +104,6 @@ export default function NewPostView() {
         </FormControl>
 
         <TextField
-          name="image"
-          label="Image"
-          value={image}
-          variant="outlined"
-          onChange={(e) => setImage(e.target.value)}
-        />
-
-        <TextField
           name="content"
           label="Content"
           multiline
@@ -92,6 +112,8 @@ export default function NewPostView() {
           variant="outlined"
           onChange={(e) => setContent(e.target.value)}
         />
+
+        <InputFileUpload onFileUpload={handleFileUpload}/>
       </Stack>
 
       <LoadingButton
@@ -141,6 +163,12 @@ export default function NewPostView() {
           <Typography variant="h4" sx={{ mt: 2, mb: 5 }}>Create a new post</Typography>
 
           {renderForm}
+
+          <Snackbar open={Boolean(alertMessage)} autoHideDuration={6000} onClose={handleCloseAlert} >
+            <Alert severity={alertSeverity} onClose={handleCloseAlert}>
+              {alertMessage}
+            </Alert>
+          </Snackbar>
 
         </Card>
       </Stack>
