@@ -9,7 +9,6 @@ export const handleNewMessage = async (title, content) => {
             content: content,
             createdAt: serverTimestamp(),
         })
-        // alert('Message added successfully');
       } catch (error) {
         console.error('Error adding message: ', error);
       }
@@ -24,7 +23,6 @@ export const handleNewNews = async (title, content, imageUrl) => {
             image: imageUrl,
             createdAt: serverTimestamp(),
         })
-        // alert('News added successfully');
       } catch (error) {
         console.error('Error adding news: ', error);
       }

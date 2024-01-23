@@ -68,8 +68,10 @@ export default function NewPostView() {
     setIsLoggingIn(true);
     if (role === 'Message') {
       await handleNewMessage(title, content);
+      showAlert('Message added successfully','success');
     } else if (role === 'News') {
       await handleNewNews(title, content, image);
+      showAlert('News added successfully','success');
     }
     setIsLoggingIn(false);
   };
