@@ -74,6 +74,7 @@ export default function NewPostView() {
       showAlert('News added successfully','success');
     }
     setIsLoggingIn(false);
+    router.push('/post');
   };
 
   const handleBack = () => {

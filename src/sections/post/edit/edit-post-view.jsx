@@ -90,6 +90,7 @@ export default function EditPostView() {
       showAlert('News update successfully', 'success');
     }
     setIsLoggingIn(false);
+    router.push('/post');
   };
 
   const handleBack = () => {
@@ -131,12 +132,12 @@ export default function EditPostView() {
         fullWidth
         sx={{ my: 3 }}
         size="large"
-        type="submit"
+        type="update"
         variant="contained"
         color="inherit"
         disabled={isLoggingIn}
       >
-        {isLoggingIn ? <CircularProgress size={24} /> : "Submit"}
+        {isLoggingIn ? <CircularProgress size={24} /> : "Update"}
       </LoadingButton>
 
       <LoadingButton
