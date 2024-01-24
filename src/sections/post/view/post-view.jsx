@@ -97,6 +97,7 @@ export default function PostView() {
   const handleFilterByName = (event) => {
     setPage(0);
     setFilterName(event.target.value);
+    console.log(typeof(event.target.value))
   };
 
   const router = useRouter();
@@ -143,7 +144,7 @@ export default function PostView() {
                   { id: 'title', label: 'Title' },
                   { id: 'content', label: 'Content' },
                   { id: 'role', label: 'Role' },
-                  { id: 'date', label: 'Date' },
+                  { id: 'createdAt', label: 'Date' },
                   { id: '' },
                 ]}
               />

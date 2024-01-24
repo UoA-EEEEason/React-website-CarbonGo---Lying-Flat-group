@@ -27,6 +27,7 @@ export default function UserView() {
   const handleFilterByName = (event) => {
     setPage(0);
     setFilterName(event.target.value);
+    console.log(typeof(event.target.value))
   };
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('name');
