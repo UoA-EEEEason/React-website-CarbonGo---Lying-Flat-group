@@ -31,7 +31,7 @@ export default function useChart(options) {
   const baseOptions = {
     // Colors
     colors: [
-      theme.palette.primary.main,
+      theme.palette.primary.blue,
       theme.palette.warning.main,
       theme.palette.info.main,
       theme.palette.error.main,

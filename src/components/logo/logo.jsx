@@ -16,7 +16,7 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
         src="/assets/logo.svg"
         sx={{ width: 40, height: 40, cursor: 'pointer' }}
       />
-      <Typography variant="h6" sx={{ ml: 5, color: 'green' }}>Lying Flat</Typography>
+      <Typography variant="h6" sx={{ ml: 5, color: '#378d11' }}>Lying Flat</Typography>
     </Box>
   );
 
