@@ -1,10 +1,9 @@
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { auth, firestore } from 'src/firebaseConfig';
 import PropTypes from 'prop-types';
-
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import { alpha } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
@@ -26,6 +25,23 @@ import navConfig from './config-navigation';
 // ----------------------------------------------------------------------
 
 export default function Nav({ openNav, onCloseNav }) {
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async currentUser => {
+      if (currentUser) {
+        const userDoc = await firestore.collection('user').doc(currentUser.uid).get();
+        if (userDoc.exists) {
+          setUsername(userDoc.data().username);
+        }
+      } else {
+        setUsername('');
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const pathname = usePathname();
 
   const upLg = useResponsive('up', 'lg');
@@ -36,7 +52,7 @@ export default function Nav({ openNav, onCloseNav }) {
     }
   }, [pathname]);
 
-const renderAccount = (
+  const renderAccount = (
     <Box
       sx={{
         my: 3,
@@ -52,7 +68,7 @@ const renderAccount = (
       <Avatar src={account.photoURL} alt="photoURL" />
 
       <Box sx={{ ml: 2 }}>
-        <Typography variant="subtitle2">{account.displayName}</Typography>
+        <Typography variant="subtitle2">{username}</Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           {account.role}

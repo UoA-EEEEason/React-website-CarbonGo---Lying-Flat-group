@@ -13,7 +13,7 @@ import { useRouter } from 'src/routes/hooks';
 import { bgGradient } from 'src/theme/css';
 import Iconify from 'src/components/iconify';
 import CircularProgress from '@mui/material/CircularProgress';
-import { checkUserStatus, handleLogin, handleLogout } from '../../firebase/auth';
+import { checkUserStatus, handleLogin } from '../../firebase/auth';
 
 export default function LoginView() {
   const theme = useTheme();
@@ -85,16 +85,6 @@ export default function LoginView() {
       >
         {isLoggingIn ? <CircularProgress size={24} /> : "Login"}
       </LoadingButton>
-
-      <LoadingButton
-        fullWidth
-        size="large"
-        variant="contained"
-        color="inherit"
-        onClick={handleLogout}
-      >
-        Logout
-      </LoadingButton>
     </form>
   );
 
@@ -125,13 +115,18 @@ export default function LoginView() {
             maxWidth: 420,
           }}
         >
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+            <img 
+              src="/assets/logo.png"
+              alt="Logo"
+              style={{ maxWidth: '300px', maxHeight: '100px' }}
+            />
+          </Box>
+
           <Typography variant="h4">Sign in to Lying Flat</Typography>
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
             Welcome to backend system
-          </Typography>
-          <Typography variant="body1" sx={{ mb: 2 }}>
-            {currentUser ? `Logged in as ${currentUser.email}` : "No user"}
           </Typography>
 
           {renderForm}

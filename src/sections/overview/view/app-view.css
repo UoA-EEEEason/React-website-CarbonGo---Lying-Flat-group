@@ -8,7 +8,7 @@
 
 /* HTML: <div class="loader"></div> */
 .loader {
-    --c:no-repeat linear-gradient(#25b09b 0 0);
+    --c:no-repeat linear-gradient(rgba(55, 141, 17, 0.8) 0 0);
     background: 
       var(--c),var(--c),var(--c),
       var(--c),var(--c),var(--c),

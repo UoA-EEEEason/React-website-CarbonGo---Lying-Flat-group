@@ -1,5 +1,4 @@
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
@@ -9,31 +8,43 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { useRouter } from 'src/routes/hooks';
-import { auth } from 'src/firebaseConfig';
+import { auth, firestore } from 'src/firebaseConfig';
 import { account } from 'src/_mock/account';
-
-// ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
   // {
   //   label: 'Home',
   //   icon: 'eva:home-fill',
   // },
-  // {
-  //   label: 'Profile',
-  //   icon: 'eva:person-fill',
-  // },
-  // {
-  //   label: 'Settings',
-  //   icon: 'eva:settings-2-fill',
-  // },
 ];
-
-// ----------------------------------------------------------------------
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
+  const [user, setUser] = useState({ displayName: '', email: '' });
   const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async currentUser => {
+      if (currentUser) {
+        const userDoc = await firestore.collection('user').doc(currentUser.uid).get();
+        if (userDoc.exists) {
+          setUser({
+            displayName: userDoc.data().username || currentUser.email,
+            email: currentUser.email
+          });
+        } else {
+          setUser({
+            displayName: currentUser.email,
+            email: currentUser.email
+          });
+        }
+      } else {
+        setUser({ displayName: '', email: '' });
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -69,14 +80,14 @@ export default function AccountPopover() {
       >
         <Avatar
           src={account.photoURL}
-          alt={account.displayName}
+          alt={user.displayName}
           sx={{
             width: 36,
             height: 36,
             border: (theme) => `solid 2px ${theme.palette.background.default}`,
           }}
         >
-          {account.displayName.charAt(0).toUpperCase()}
+          {user.displayName.charAt(0).toUpperCase()}
         </Avatar>
       </IconButton>
 
@@ -97,10 +108,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {user.displayName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {user.email}
           </Typography>
         </Box>
 
