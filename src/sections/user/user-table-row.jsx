@@ -19,11 +19,10 @@ import Iconify from 'src/components/iconify';
 export default function UserTableRow({
   selected,
   name,
-  email,
   avatarUrl,
-  password,
-  tree_location,
-  numOfCertificates,
+  email,
+  points,
+  certificate,
   handleClick,
 }) {
   const [open, setOpen] = useState(null);
@@ -54,11 +53,9 @@ export default function UserTableRow({
 
         <TableCell>{email}</TableCell>
 
-        {/* <TableCell>{password}</TableCell> */}
+        <TableCell>{points}</TableCell>
 
-        <TableCell>{tree_location}</TableCell>
-
-        <TableCell>{numOfCertificates}</TableCell>
+        <TableCell >{certificate}</TableCell>
 
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
@@ -93,11 +90,10 @@ export default function UserTableRow({
 
 UserTableRow.propTypes = {
   avatarUrl: PropTypes.any,
-  email: PropTypes.any,
-  // password: PropTypes.any,
   handleClick: PropTypes.func,
-  tree_location: PropTypes.any,
   name: PropTypes.any,
-  numOfCertificates: PropTypes.any,
+  email: PropTypes.any,
+  points: PropTypes.any,
+  certificate: PropTypes.any,
   selected: PropTypes.any,
 };
