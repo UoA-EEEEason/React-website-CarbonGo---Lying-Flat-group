@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { useRouter } from 'src/routes/hooks';
@@ -17,6 +17,8 @@ import Iconify from 'src/components/iconify';
 
 import { fDateTime } from 'src/utils/format-time';
 import { truncateText } from 'src/utils/helps';
+
+import { deleteNewsById } from 'src/firebase/post';
 
 // ----------------------------------------------------------------------
 
@@ -42,6 +44,25 @@ export default function UserTableRow({
   const router = useRouter();
   const handleEditPost = () => {
     router.push('/edit-post', { id: id, Role: role });
+  }
+
+  const [deleted, setDeleted] = useState(false);
+
+  useEffect(() => {
+    async function deleteData() {
+      const response = await deleteNewsById(id);
+      setDeleted(response);
+      if (response) {
+        router.reload();
+      }
+    }
+    if (deleted) {
+      deleteData();
+    }
+  }, [deleted]);
+
+  const handleDeletePost = () => {
+    setDeleted(true);  
   }
 
   return (
@@ -87,7 +108,7 @@ export default function UserTableRow({
           Edit
         </MenuItem>
 
-        <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
+        <MenuItem onClick={handleDeletePost} sx={{ color: 'error.main' }}>
           <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
           Delete
         </MenuItem>
