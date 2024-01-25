@@ -168,3 +168,22 @@ export const getAllMessage = async () => {
     return [];
   }
 };
+
+export const deleteNewsById = async (id) => {
+  try {
+    const docRef = firestore.collection('news').doc(id);
+    const docSnapshot = await docRef.get();
+
+    if (docSnapshot.exists) {
+      await docRef.delete();
+      console.log("Document deleted successfully!");
+      return true;
+    } else {
+      console.log("Document not found!");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error deleting the news:", error);
+    return false;
+  }
+};
