@@ -51,12 +51,10 @@ export default function UserTableRow({
           <Checkbox disableRipple checked={selected} onChange={handleClick} />
         </TableCell>
 
-        <TableCell component="th" scope="row" padding="none">
-          <Stack direction="row" alignItems="center" spacing={2}>
+        <TableCell>
             <Typography variant="subtitle2" noWrap>
               {title}
             </Typography>
-          </Stack>
         </TableCell>
 
         <TableCell>{truncateText(content, 50)}</TableCell>

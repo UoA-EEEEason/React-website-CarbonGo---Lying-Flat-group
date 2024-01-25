@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { EditProductView } from 'src/sections/products/edit';
+import { EditUserView } from 'src/sections/user/edit';
 
 // ----------------------------------------------------------------------
 
-export default function EditProductPage() {
+export default function EditUserPage() {
   return (
     <>
       <Helmet>
-        <title> EditProduct | Lying Flat </title>
+        <title> EditUser | Lying Flat </title>
       </Helmet>
 
-      <EditProductView />
+      <EditUserView />
     </>
   );
 }

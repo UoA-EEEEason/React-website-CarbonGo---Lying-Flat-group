@@ -42,7 +42,6 @@ export default function UserTableRow({
   const router = useRouter();
   const handleEditPost = () => {
     router.push('/edit-product', { id: id });
-    console.log('id:',id)
   }
 
   return (
@@ -52,13 +51,10 @@ export default function UserTableRow({
           <Checkbox disableRipple checked={selected} onChange={handleClick} />
         </TableCell>
 
-        <TableCell component="th" scope="row" padding="none">
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={name} src={avatarUrl} />
+        <TableCell>
             <Typography variant="subtitle2" noWrap>
               {name}
             </Typography>
-          </Stack>
         </TableCell>
 
         <TableCell>{price}</TableCell>
