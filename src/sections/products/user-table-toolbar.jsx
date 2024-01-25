@@ -11,7 +11,7 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function ProductsTableToolbar({ numSelected, filterName, onFilterName }) {
+export default function UserTableToolbar({ numSelected, filterName, onFilterName }) {
   return (
     <Toolbar
       sx={{
@@ -33,7 +33,7 @@ export default function ProductsTableToolbar({ numSelected, filterName, onFilter
         <OutlinedInput
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search Trees..."
+          placeholder="Search tree..."
           startAdornment={
             <InputAdornment position="start">
               <Iconify
@@ -62,7 +62,7 @@ export default function ProductsTableToolbar({ numSelected, filterName, onFilter
   );
 }
 
-ProductsTableToolbar.propTypes = {
+UserTableToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,

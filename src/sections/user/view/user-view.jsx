@@ -1,36 +1,56 @@
-import Stack from '@mui/material/Stack';
+import React, { useState, useEffect } from 'react';
+
+import { useRouter } from 'src/routes/hooks';
+
 import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography';
-import UserTableToolbar from '../user-table-toolbar';
-import TableContainer from '@mui/material/TableContainer';
-import UserTableHead from '../user-table-head';
 import TableBody from '@mui/material/TableBody';
+import Typography from '@mui/material/Typography';
+import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
-import { useState } from 'react';
-import { users } from 'src/_mock/user';
+// import { users } from 'src/_mock/user';
 
 import Iconify from 'src/components/iconify';
-import UserTableRow from '../user-table-row';
 import Scrollbar from 'src/components/scrollbar';
+
+import TableNoData from '../table-no-data';
+import UserTableRow from '../user-table-row';
+import UserTableHead from '../user-table-head';
+import TableEmptyRows from '../table-empty-rows';
+import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
+
+import { getAllUsers } from 'src/firebase/user';
 
 // ----------------------------------------------------------------------
 
-export default function UserView() {
-  const [selected, setSelected] = useState([]);
-  const [filterName, setFilterName] = useState('');
-  const handleFilterByName = (event) => {
-    setPage(0);
-    setFilterName(event.target.value);
-    console.log(typeof(event.target.value))
-  };
+export default function UserPage() {
+  const [page, setPage] = useState(0);
+
   const [order, setOrder] = useState('asc');
+
+  const [selected, setSelected] = useState([]);
+
   const [orderBy, setOrderBy] = useState('name');
+
+  const [filterName, setFilterName] = useState('');
+
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await getAllUsers();
+      setUsers(response)
+    }
+    fetchData();
+  }, []);
+
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
@@ -38,6 +58,7 @@ export default function UserView() {
       setOrderBy(id);
     }
   };
+
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = users.map((n) => n.name);
@@ -46,36 +67,64 @@ export default function UserView() {
     }
     setSelected([]);
   };
-  const dataFiltered = applyFilter({
-    inputData: users,
-    comparator: getComparator(order, orderBy),
-    filterName,
-  });
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+    setSelected(newSelected);
+  };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
+
   const handleChangeRowsPerPage = (event) => {
     setPage(0);
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
+  const handleFilterByName = (event) => {
+    setPage(0);
+    setFilterName(event.target.value);
+  };
+
+  const dataFiltered = applyFilter({
+    inputData: users,
+    comparator: getComparator(order, orderBy),
+    filterName,
+  });
+
+  const notFound = !dataFiltered.length && !!filterName;
+
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">User</Typography>
+        <Typography variant="h4">Users</Typography>
 
         <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
           New User
         </Button>
       </Stack>
+
       <Card>
         <UserTableToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
         />
+
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
@@ -89,9 +138,9 @@ export default function UserView() {
                 headLabel={[
                   { id: 'name', label: 'Name' },
                   { id: 'email', label: 'Email' },
-                  // { id: 'password', label: 'Password' },
-                  { id: 'tree_location', label: 'Tree location' },
-                  { id: 'numOfCertificates', label: 'Number of certificates'},
+                  { id: 'points', label: 'Points' },
+                  { id: 'certificate', label: 'Certificate' },
+                  { id: '' },
                 ]}
               />
               <TableBody>
@@ -102,18 +151,25 @@ export default function UserView() {
                       key={row.id}
                       name={row.name}
                       email={row.email}
-                      // password={row.password}
-                      tree_location={row.tree_location}
-                      numOfCertificates={row.numOfCertificates}
+                      points={row.points}
+                      certificate={row.certificate}
                       avatarUrl={row.avatarUrl}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
                     />
                   ))}
+
+                <TableEmptyRows
+                  height={77}
+                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                />
+
+                {notFound && <TableNoData query={filterName} />}
               </TableBody>
-</Table>
+            </Table>
           </TableContainer>
         </Scrollbar>
+
         <TablePagination
           page={page}
           component="div"

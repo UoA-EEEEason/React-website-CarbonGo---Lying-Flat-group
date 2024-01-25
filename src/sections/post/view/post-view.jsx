@@ -60,7 +60,7 @@ export default function PostView() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = posts.map((n) => n.name);
+      const newSelecteds = posts.map((n) => n.title);
       setSelected(newSelecteds);
       return;
     }
@@ -97,7 +97,6 @@ export default function PostView() {
   const handleFilterByName = (event) => {
     setPage(0);
     setFilterName(event.target.value);
-    console.log(typeof(event.target.value))
   };
 
   const router = useRouter();

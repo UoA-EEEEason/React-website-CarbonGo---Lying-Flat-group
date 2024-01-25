@@ -5,11 +5,9 @@ import { faker } from '@faker-js/faker';
 
 export const products = [...Array(24)].map((_, index) => ({
   id: faker.string.uuid(),
- 
   name: faker.person.fullName(),
-  company:  faker.number.int({ min: 4, max: 99, precision: 0.01 }),
-  
-  discription: sample(['This tree is...', 'Hi, This tree balabala']),
-  treeNumber: faker.number.int({ min: 4, max: 99, precision: 0.01 }),
-  treeUrl:`/assets/images/avatars/avatar_${index + 1}.jpg`
+  price: Math.floor(faker.datatype.number({ min: 1000, max: 10000 })),
+  number:Math.floor(faker.datatype.number({ min: 1, max: 1000 })),
+  description: faker.lorem.sentences(2),
+  price: Math.floor(faker.datatype.number({ min: 1000, max: 10000 })),
 }));

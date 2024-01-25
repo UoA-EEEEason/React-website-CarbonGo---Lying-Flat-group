@@ -19,12 +19,10 @@ import Iconify from 'src/components/iconify';
 export default function UserTableRow({
   selected,
   name,
- 
-  company,
-  treeNumber,
-  isVerified,
-  discription,
-  treeUrl,
+  avatarUrl,
+  price,
+  number,
+  description,
   handleClick,
 }) {
   const [open, setOpen] = useState(null);
@@ -39,30 +37,25 @@ export default function UserTableRow({
 
   return (
     <>
-      <TableRow hover tabIndex={-1} treeNumber="checkbox" selected={selected}>
+      <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
         <TableCell padding="checkbox">
           <Checkbox disableRipple checked={selected} onChange={handleClick} />
         </TableCell>
 
         <TableCell component="th" scope="row" padding="none">
           <Stack direction="row" alignItems="center" spacing={2}>
-            
+            <Avatar alt={name} src={avatarUrl} />
             <Typography variant="subtitle2" noWrap>
               {name}
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell>{company}</TableCell>
+        <TableCell>{price}</TableCell>
 
-        <TableCell>{treeNumber}</TableCell>
+        <TableCell>{number}</TableCell>
 
-        <TableCell>{treeUrl}</TableCell>
-
-        <TableCell>
-      {discription}
-        </TableCell>
-       
+        <TableCell>{description}</TableCell>
 
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
@@ -96,13 +89,11 @@ export default function UserTableRow({
 }
 
 UserTableRow.propTypes = {
-
-  company: PropTypes.any,
+  avatarUrl: PropTypes.any,
   handleClick: PropTypes.func,
-  isVerified: PropTypes.any,
   name: PropTypes.any,
-  treeNumber: PropTypes.any,
+  price: PropTypes.any,
+  number: PropTypes.any,
+  description: PropTypes.any,
   selected: PropTypes.any,
-  discription: PropTypes.string,
-  treeUrl:PropTypes.any
 };
