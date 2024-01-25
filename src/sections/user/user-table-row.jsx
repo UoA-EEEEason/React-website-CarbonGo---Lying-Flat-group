@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { useRouter } from 'src/routes/hooks';
+
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
@@ -18,6 +20,7 @@ import Iconify from 'src/components/iconify';
 
 export default function UserTableRow({
   selected,
+  id,
   name,
   avatarUrl,
   email,
@@ -34,6 +37,11 @@ export default function UserTableRow({
   const handleCloseMenu = () => {
     setOpen(null);
   };
+
+  const router = useRouter();
+  const handleEditUser = () => {
+    router.push('/edit-user', { id: id });
+  }
 
   return (
     <>
@@ -74,7 +82,7 @@ export default function UserTableRow({
           sx: { width: 140 },
         }}
       >
-        <MenuItem onClick={handleCloseMenu}>
+        <MenuItem onClick={handleEditUser}>
           <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
           Edit
         </MenuItem>

@@ -13,6 +13,7 @@ export const NewPostPage = lazy(() => import('src/pages/new-post'));
 export const EditPostPage = lazy(() => import('src/pages/edit-post'));
 export const NewProductPage = lazy(() => import('src/pages/new-product'));
 export const EditProductPage = lazy(() => import('src/pages/edit-product'));
+export const EditUserPage = lazy(() => import('src/pages/edit-user'));
 
 // ----------------------------------------------------------------------
 
@@ -99,6 +100,10 @@ export default function Router() {
     {
       path: 'edit-product',
       element: <EditProductPage />,
+    },
+    {
+      path: 'edit-user',
+      element: <EditUserPage />,
     },
     {
       path: '404',

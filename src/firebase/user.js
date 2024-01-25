@@ -42,3 +42,29 @@ export const getAllUsers = async () => {
     }
 };
 
+export const getUserById = async (id) => {
+    try {
+      const docRef = firestore.collection('user').doc(id);
+      const docSnapshot = await docRef.get();
+      if (docSnapshot.exists) {
+        return docSnapshot.data();
+      } else {
+        console.log("Document not found!");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching the user:", error);
+      return 0;
+    }
+  };
+
+  export const updateUser = async (id, username) => {
+    const messageRef = firestore.collection('user').doc(id);
+    try {
+      messageRef.update({
+        username: username,
+      })
+    } catch (error) {
+      console.error('Error updating user: ', error);
+    }
+  }
