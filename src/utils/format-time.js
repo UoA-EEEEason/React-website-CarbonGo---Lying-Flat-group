@@ -25,3 +25,26 @@ export function fToNow(date) {
       })
     : '';
 }
+
+export function timeSince(date) {
+  const now = new Date();
+  const secondsPast = (now.getTime() - date.getTime()) / 1000;
+
+  if (secondsPast < 60) { // less than a minute
+    return parseInt(secondsPast) + ' seconds ago';
+  }
+  if (secondsPast < 3600) { // less than an hour
+    return parseInt(secondsPast / 60) + ' minutes ago';
+  }
+  if (secondsPast <= 86400) { // less than a day
+    return parseInt(secondsPast / 3600) + ' hours ago';
+  }
+  if (secondsPast <= 2592000) { // less than a month
+    return parseInt(secondsPast / 86400) + ' days ago';
+  }
+  if (secondsPast <= 31536000) { // less than a year
+    return parseInt(secondsPast / 2592000) + ' months ago';
+  }
+  return parseInt(secondsPast / 31536000) + ' years ago';
+}
+

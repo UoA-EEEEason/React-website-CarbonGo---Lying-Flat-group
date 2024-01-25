@@ -8,8 +8,8 @@ import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import CardHeader from '@mui/material/CardHeader';
-
-import { fToNow } from 'src/utils/format-time';
+import { useRouter } from 'src/routes/hooks';
+import { timeSince } from 'src/utils/format-time';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -17,6 +17,13 @@ import Scrollbar from 'src/components/scrollbar';
 // ----------------------------------------------------------------------
 
 export default function AppNewsUpdate({ title, subheader, list, ...other }) {
+
+  const router = useRouter();
+
+  const handleBack = () => {
+    router.push('/post');
+  }
+
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} />
@@ -36,6 +43,7 @@ export default function AppNewsUpdate({ title, subheader, list, ...other }) {
           size="small"
           color="inherit"
           endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
+          onClick={handleBack}
         >
           View all
         </Button>
@@ -75,7 +83,7 @@ function NewsItem({ news }) {
       </Box>
 
       <Typography variant="caption" sx={{ pr: 3, flexShrink: 0, color: 'text.secondary' }}>
-        {fToNow(postedAt)}
+        {timeSince(postedAt)}
       </Typography>
     </Stack>
   );
