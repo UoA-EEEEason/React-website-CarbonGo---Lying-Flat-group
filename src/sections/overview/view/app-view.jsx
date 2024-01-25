@@ -19,6 +19,7 @@ import {
   getElectricityConsumption,
   getFoodConsumption,
   getTotalPoints,
+  getNewsData,
 } from '../../../firebase/dashboard';
 import './app-view.css'
 
@@ -34,6 +35,7 @@ export default function AppView() {
   const [foodConsumption, setFoodConsumption] = useState(null);
   const [totalPoints, setTotalPoints] = useState(null);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [newsData, setNewsData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +50,7 @@ export default function AppView() {
       const electricity = await getElectricityConsumption();
       const food = await getFoodConsumption();
       const points = await getTotalPoints();
+      const newsUpdate = await getNewsData();
       setTotalConsumption(consumption);
       setTotalUsers(users);
       setTotalTrees(trees);
@@ -57,6 +60,8 @@ export default function AppView() {
       setElectricityConsumption(electricity);
       setFoodConsumption(food);
       setTotalPoints(points);
+      setNewsData(newsUpdate);
+
       setIsDataLoaded(true);
     };
 
@@ -66,8 +71,8 @@ export default function AppView() {
   if (!isDataLoaded) {
     return (
       <div className="app-view-container">
-            <div className="loader"></div>
-        </div>
+        <div className="loader"></div>
+      </div>
     );
   }
 
@@ -117,39 +122,40 @@ export default function AppView() {
         <Grid xs={12} md={6} lg={8}>
           <AppWebsiteVisits
             title="Total Carbon Emissions"
-            subheader="(+43%) than last year"
+            // subheader="(+43%) than last year"
             chart={{
               labels: [
-                '01/01/2003',
-                '02/01/2003',
-                '03/01/2003',
-                '04/01/2003',
-                '05/01/2003',
-                '06/01/2003',
-                '07/01/2003',
-                '08/01/2003',
-                '09/01/2003',
-                '10/01/2003',
-                '11/01/2003',
+                '03/01/2023',
+                '04/01/2023',
+                '05/01/2023',
+                '06/01/2023',
+                '07/01/2023',
+                '08/01/2023',
+                '09/01/2023',
+                '10/01/2023',
+                '11/01/2023',
+                '12/01/2023',
+                '01/01/2024',
+                '02/01/2024',
               ],
               series: [
                 {
-                  name: 'Team A',
+                  name: 'Predict Data',
                   type: 'column',
                   fill: 'solid',
-                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
+                  data: [31, 23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
                 },
                 {
-                  name: 'Team B',
+                  name: '2023',
                   type: 'area',
                   fill: 'gradient',
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+                  data: [39, 44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
                 },
                 {
-                  name: 'Team C',
+                  name: '2024',
                   type: 'line',
                   fill: 'solid',
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+                  data: [30, 25,],
                 },
               ],
             }}
@@ -173,12 +179,12 @@ export default function AppView() {
         <Grid xs={12} md={6} lg={8}>
           <AppNewsUpdate
             title="News Update"
-            list={[...Array(5)].map((_, index) => ({
-              id: faker.string.uuid(),
-              title: faker.person.jobTitle(),
-              description: faker.commerce.productDescription(),
-              image: `/assets/images/covers/cover_${index + 1}.jpg`,
-              postedAt: faker.date.recent(),
+            list={newsData.map(newsUpdate => ({
+              id: newsUpdate.id,
+              title: newsUpdate.title,
+              description: newsUpdate.content,
+              image: newsUpdate.image,
+              postedAt: newsUpdate.createdAt.toDate()
             }))}
           />
         </Grid>
@@ -187,9 +193,10 @@ export default function AppView() {
           <AppCurrentSubject
             title="Current Status"
             chart={{
-              categories: ['Traffic', 'Walk','Electricity', 'Food'],
+              categories: ['Traffic', 'Walk', 'Electricity', 'Food'],
               series: [
                 { name: 'Actual Status', data: [trafficConsumption, walkConsumption, electricityConsumption, foodConsumption] },
+                // need to add predict status
                 { name: 'Predict Status', data: [3000, 4000, 2000, 1000] },
               ],
             }}
