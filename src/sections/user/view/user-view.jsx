@@ -153,7 +153,7 @@ export default function UserPage() {
                       email={row.email}
                       points={row.points}
                       certificate={row.certificate}
-                      avatarUrl={row.avatarUrl}
+                      avatarUrl={`/assets/images/avatars/avatar_${Math.floor(Math.random() * 24) + 1}.jpg`}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
                     />

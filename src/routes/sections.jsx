@@ -11,6 +11,8 @@ export const ProductsPage = lazy(() => import('src/pages/products'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 export const NewPostPage = lazy(() => import('src/pages/new-post'));
 export const EditPostPage = lazy(() => import('src/pages/edit-post'));
+export const NewProductPage = lazy(() => import('src/pages/new-product'));
+export const EditProductPage = lazy(() => import('src/pages/edit-product'));
 
 // ----------------------------------------------------------------------
 
@@ -89,6 +91,14 @@ export default function Router() {
     {
       path: 'edit-post',
       element: <EditPostPage />,
+    },
+    {
+      path: 'new-product',
+      element: <NewProductPage />,
+    },
+    {
+      path: 'edit-product',
+      element: <EditProductPage />,
     },
     {
       path: '404',
