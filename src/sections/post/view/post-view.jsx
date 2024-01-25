@@ -99,11 +99,6 @@ export default function PostView() {
     setFilterName(event.target.value);
   };
 
-  const router = useRouter();
-  const handleNewPost = () => {
-    router.push('/new-post');
-  }
-
   // get data here
   const dataFiltered = applyFilter({
     inputData: posts,
@@ -112,6 +107,12 @@ export default function PostView() {
   });
 
   const notFound = !dataFiltered.length && !!filterName;
+
+  const router = useRouter();
+  const handleNewPost = () => {
+    router.push('/new-post');
+  }
+  
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>

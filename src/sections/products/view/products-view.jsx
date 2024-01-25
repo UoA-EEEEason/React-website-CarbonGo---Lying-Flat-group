@@ -109,12 +109,17 @@ export default function ProductsView() {
 
   const notFound = !dataFiltered.length && !!filterName;
 
+  const router = useRouter();
+  const handleNew = () => {
+    router.push('/new-product');
+  }
+
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Users</Typography>
 
-        <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
+        <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill"/>} onClick={handleNew}>
           New Tree
         </Button>
       </Stack>
@@ -139,7 +144,6 @@ export default function ProductsView() {
                 headLabel={[
                   { id: 'name', label: 'Name' },
                   { id: 'price', label: 'Price' },
-                  { id: 'number', label: 'Number' },
                   { id: 'description', label: 'Description' },
                   { id: '' },
                 ]}
@@ -150,9 +154,9 @@ export default function ProductsView() {
                   .map((row) => (
                     <UserTableRow
                       key={row.id}
+                      id = {row.id}
                       name={row.name}
                       price={row.price}
-                      number={row.number}
                       description={row.desc}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}

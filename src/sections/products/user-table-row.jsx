@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { useRouter } from 'src/routes/hooks';
+
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
@@ -14,14 +16,16 @@ import IconButton from '@mui/material/IconButton';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
+import { truncateText } from 'src/utils/helps';
+
 // ----------------------------------------------------------------------
 
 export default function UserTableRow({
   selected,
+  id,
   name,
   avatarUrl,
   price,
-  number,
   description,
   handleClick,
 }) {
@@ -34,6 +38,12 @@ export default function UserTableRow({
   const handleCloseMenu = () => {
     setOpen(null);
   };
+
+  const router = useRouter();
+  const handleEditPost = () => {
+    router.push('/edit-product', { id: id });
+    console.log('id:',id)
+  }
 
   return (
     <>
@@ -53,9 +63,7 @@ export default function UserTableRow({
 
         <TableCell>{price}</TableCell>
 
-        <TableCell>{number}</TableCell>
-
-        <TableCell>{description}</TableCell>
+        <TableCell>{truncateText(description, 50)}</TableCell>
 
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
@@ -74,7 +82,7 @@ export default function UserTableRow({
           sx: { width: 140 },
         }}
       >
-        <MenuItem onClick={handleCloseMenu}>
+        <MenuItem onClick={handleEditPost}>
           <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
           Edit
         </MenuItem>
@@ -89,11 +97,11 @@ export default function UserTableRow({
 }
 
 UserTableRow.propTypes = {
+  id: PropTypes.any,
   avatarUrl: PropTypes.any,
   handleClick: PropTypes.func,
   name: PropTypes.any,
   price: PropTypes.any,
-  number: PropTypes.any,
   description: PropTypes.any,
   selected: PropTypes.any,
 };
