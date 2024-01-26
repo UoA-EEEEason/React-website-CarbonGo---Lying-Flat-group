@@ -99,7 +99,7 @@ export default function NotificationsPopover() {
 
   return (
     <>
-      <IconButton color={open ? 'primary' : 'default'} onClick={handleOpen}>
+      {/* <IconButton color={open ? 'primary' : 'default'} onClick={handleOpen}>
         <Badge badgeContent={totalUnRead} color="error">
           <Iconify width={24} icon="solar:bell-bing-bold-duotone" />
         </Badge>
@@ -173,7 +173,7 @@ export default function NotificationsPopover() {
             View All
           </Button>
         </Box>
-      </Popover>
+      </Popover> */}
     </>
   );
 }
