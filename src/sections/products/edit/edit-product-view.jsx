@@ -40,10 +40,11 @@ export default function EditProductView() {
 
         data = await getTreeById(id);
 
-        if (data && data.name && data.price && data.desc) {
+        if (data && data.name && data.price && data.desc && data.image) {
           setName(data.name);
           setPrice(data.price);
           setDescription(data.desc);
+          setImage(data.image);
         } else {
           console.error("Data is null or missing required properties.");
         }

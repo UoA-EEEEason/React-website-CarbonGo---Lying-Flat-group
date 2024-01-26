@@ -48,9 +48,10 @@ export default function EditPostView() {
           return;
         }
 
-        if (data && data.title && data.content) {
+        if (data && data.title && data.content && data.image) {
           setTitle(data.title);
           setContent(data.content);
+          setImage(data.image);
           setRole(Role);
         } else {
           console.error("Data is null or missing required properties.");
