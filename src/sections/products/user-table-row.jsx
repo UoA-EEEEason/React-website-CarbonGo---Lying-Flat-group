@@ -12,11 +12,15 @@ import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
 import { truncateText } from 'src/utils/helps';
+
+import { deleteTreeById } from 'src/firebase/products';
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +34,17 @@ export default function UserTableRow({
   handleClick,
 }) {
   const [open, setOpen] = useState(null);
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [alertSeverity, setAlertSeverity] = useState('error');
+
+  const showAlert = (message, severity = 'error') => {
+    setAlertMessage(message);
+    setAlertSeverity(severity);
+  };
+
+  const handleCloseAlert = () => {
+    setAlertMessage(null);
+  };
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -40,9 +55,22 @@ export default function UserTableRow({
   };
 
   const router = useRouter();
-  const handleEditPost = () => {
+  const handleEdit = () => {
     router.push('/edit-product', { id: id });
   }
+
+  const handleDelete = async () => {
+    let deleted;
+    deleted = await deleteTreeById(id);
+    
+    if (deleted) {
+      showAlert('Delete successfully!', 'success');
+      handleCloseMenu();
+      router.reload();
+    } else {
+      showAlert('Failed to delete tree. Tree not found or an error occurred!', 'error');
+    }
+  };
 
   return (
     <>
@@ -78,12 +106,12 @@ export default function UserTableRow({
           sx: { width: 140 },
         }}
       >
-        <MenuItem onClick={handleEditPost}>
+        <MenuItem onClick={handleEdit}>
           <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
           Edit
         </MenuItem>
 
-        <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
+        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
           <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
           Delete
         </MenuItem>

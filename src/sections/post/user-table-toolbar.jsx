@@ -9,9 +9,22 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import Iconify from 'src/components/iconify';
 
+import { deleteSelected } from 'src/firebase/post';
+import { useRouter } from 'src/routes/hooks';
+
 // ----------------------------------------------------------------------
 
-export default function UserTableToolbar({ numSelected, filterName, onFilterName }) {
+export default function UserTableToolbar({ selected, filterName, onFilterName }) {
+  const router = useRouter();
+  const numSelected = selected.length;
+  const handleDelete = ()=>{
+    deleteSelected(selected);
+
+    setTimeout(() => {
+      router.reload();
+    }, 2000);
+  }
+
   return (
     <Toolbar
       sx={{
@@ -47,7 +60,7 @@ export default function UserTableToolbar({ numSelected, filterName, onFilterName
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleDelete}>
             <Iconify icon="eva:trash-2-fill" />
           </IconButton>
         </Tooltip>
@@ -63,7 +76,7 @@ export default function UserTableToolbar({ numSelected, filterName, onFilterName
 }
 
 UserTableToolbar.propTypes = {
-  numSelected: PropTypes.number,
+  selected: PropTypes.any,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
 };

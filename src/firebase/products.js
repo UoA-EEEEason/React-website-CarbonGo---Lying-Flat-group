@@ -72,3 +72,37 @@ export const updateTree = async (id, name, price, description, imageUrl) => {
     console.error('Error updating tree: ', error);
   }
 }
+
+export const deleteTreeById = async (id) => {
+  try {
+    const docRef = firestore.collection('tree').doc(id);
+    const docSnapshot = await docRef.get();
+
+    if (docSnapshot.exists) {
+      await docRef.delete();
+      console.log("Document deleted successfully!");
+      return true;
+    } else {
+      console.log("Document not found!");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error deleting the tree:", error);
+    return false;
+  }
+};
+
+export const deleteSelected = async (selected) => {
+  const batch = firestore.batch();
+
+  selected.forEach((docId) => {
+    const docRef = firestore.collection('tree').doc(docId.id);
+    batch.delete(docRef);
+  });
+  batch.commit().then(() => {
+    console.log('Batch deletion successful!');
+  }).catch((error) => {
+    console.error('Error deleting documents: ', error);
+  });
+
+}
