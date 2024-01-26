@@ -19,7 +19,7 @@ import Snackbar from '@mui/material/Snackbar';
 
 import InputFileUpload from 'src/components/upload';
 
-import { postNewMessage, postNews } from 'src/firebase/post';
+import { postMessage, postNews } from 'src/firebase/post';
 
 export default function NewPostView() {
   const theme = useTheme();
@@ -60,6 +60,11 @@ export default function NewPostView() {
       return;
     }
 
+    if (!content) {
+      showAlert('Please input content before submitting.');
+      return;
+    }
+
     if (!isFileUploaded && (role === 'News') ) {
       showAlert('Please upload a file before submitting.');
       return;
@@ -67,14 +72,17 @@ export default function NewPostView() {
 
     setIsLoggingIn(true);
     if (role === 'Message') {
-      await postNewMessage(title, content);
+      await postMessage(title, content);
       showAlert('Message added successfully','success');
     } else if (role === 'News') {
       await postNews(title, content, image);
       showAlert('News added successfully','success');
     }
     setIsLoggingIn(false);
-    router.push('/post');
+
+    setTimeout(() => {
+      router.reload();
+    }, 2000);
   };
 
   const handleBack = () => {

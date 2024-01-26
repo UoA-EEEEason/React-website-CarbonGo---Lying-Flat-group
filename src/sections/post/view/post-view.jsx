@@ -60,18 +60,18 @@ export default function PostView() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = posts.map((n) => n.title);
+      const newSelecteds = posts.map((n) => n);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, row) => {
+    const selectedIndex = selected.indexOf(row);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, row);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -125,7 +125,7 @@ export default function PostView() {
 
       <Card>
         <UserTableToolbar
-          numSelected={selected.length}
+          selected={selected}
           filterName={filterName}
           onFilterName={handleFilterByName}
         />
@@ -159,8 +159,8 @@ export default function PostView() {
                       role={row.role}
                       content={row.content}
                       date={row.createdAt}
-                      selected={selected.indexOf(row.title) !== -1}
-                      handleClick={(event) => handleClick(event, row.title)}
+                      selected={selected.indexOf(row) !== -1}
+                      handleClick={(event) => handleClick(event, row)}
                     />
                   ))}
 

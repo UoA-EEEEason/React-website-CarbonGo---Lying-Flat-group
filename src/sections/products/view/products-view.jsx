@@ -47,7 +47,6 @@ export default function ProductsView() {
     async function fetchData() {
       const response = await getAllProducts();
       setProducts(response)
-      console.log(response)
     }
     fetchData();
   }, []);
@@ -62,18 +61,18 @@ export default function ProductsView() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = products.map((n) => n.name);
+      const newSelecteds = products.map((n) => n);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, row) => {
+    const selectedIndex = selected.indexOf(row);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, row);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -117,7 +116,7 @@ export default function ProductsView() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Users</Typography>
+        <Typography variant="h4">Tree</Typography>
 
         <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill"/>} onClick={handleNew}>
           New Tree
@@ -126,7 +125,7 @@ export default function ProductsView() {
 
       <Card>
         <UserTableToolbar
-          numSelected={selected.length}
+          selected={selected}
           filterName={filterName}
           onFilterName={handleFilterByName}
         />
@@ -158,8 +157,8 @@ export default function ProductsView() {
                       name={row.name}
                       price={row.price}
                       description={row.desc}
-                      selected={selected.indexOf(row.name) !== -1}
-                      handleClick={(event) => handleClick(event, row.name)}
+                      selected={selected.indexOf(row) !== -1}
+                      handleClick={(event) => handleClick(event, row)}
                     />
                   ))}
 

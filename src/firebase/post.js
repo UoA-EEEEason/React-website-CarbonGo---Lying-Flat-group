@@ -1,7 +1,7 @@
 import { firestore,storage } from '../firebaseConfig';
 import { serverTimestamp } from "firebase/firestore";
 
-export const postNewMessage = async (title, content) => {
+export const postMessage = async (title, content) => {
     const messageRef = firestore.collection('message');
     try {
         messageRef.add({
@@ -128,7 +128,6 @@ export const getAllNews = async () => {
           role: 'News',
         });
       });
-      // console.log('newsArray:',newsArray)
       return newsArray;
     } else {
       console.log("No documents found in the 'news' collection.");
@@ -187,3 +186,51 @@ export const deleteNewsById = async (id) => {
     return false;
   }
 };
+
+
+export const deleteMessageById = async (id) => {
+  try {
+    const docRef = firestore.collection('message').doc(id);
+    const docSnapshot = await docRef.get();
+
+    if (docSnapshot.exists) {
+      await docRef.delete();
+      console.log("Document deleted successfully!");
+      return true;
+    } else {
+      console.log("Document not found!");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error deleting the message:", error);
+    return false;
+  }
+};
+
+export const deleteSelected = async (selected) => {
+  const newsArray = selected.filter(item => item.role === 'News');
+  const messageArray = selected.filter(item => item.role === 'Message');
+
+  const batchNews = firestore.batch();
+  const batchMessage = firestore.batch();
+
+  newsArray.forEach((docId) => {
+    const docRef = firestore.collection('news').doc(docId.id);
+    batchNews.delete(docRef);
+  });
+  batchNews.commit().then(() => {
+    console.log('Batch deletion successful!');
+  }).catch((error) => {
+    console.error('Error deleting documents: ', error);
+  });
+
+  messageArray.forEach((docId) => {
+    const docRef = firestore.collection('message').doc(docId.id);
+    batchMessage.delete(docRef);
+  });
+  batchMessage.commit().then(() => {
+    console.log('Batch deletion successful!');
+  }).catch((error) => {
+    console.error('Error deleting documents: ', error);
+  });
+}

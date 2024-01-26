@@ -65,7 +65,10 @@ export default function NewProductView() {
     await postTree(name, price, description, image);
     showAlert('Tree added successfully', 'success');
     setIsLoggingIn(false);
-    router.push('/products');
+    
+    setTimeout(() => {
+      router.reload();
+    }, 2000);
   };
 
   const handleBack = () => {
