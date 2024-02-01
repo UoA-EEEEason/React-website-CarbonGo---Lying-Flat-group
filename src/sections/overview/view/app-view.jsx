@@ -18,7 +18,6 @@ import {
   getTrafficConsumption,
   getElectricityConsumption,
   getFoodConsumption,
-  getTotalPoints,
   getNewsData,
 } from '../../../firebase/dashboard';
 import './app-view.css'
@@ -33,7 +32,6 @@ export default function AppView() {
   const [trafficConsumption, setTrafficConsumption] = useState(null);
   const [electricityConsumption, setElectricityConsumption] = useState(null);
   const [foodConsumption, setFoodConsumption] = useState(null);
-  const [totalPoints, setTotalPoints] = useState(null);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [newsData, setNewsData] = useState([]);
 
@@ -49,7 +47,6 @@ export default function AppView() {
       const traffic = await getTrafficConsumption();
       const electricity = await getElectricityConsumption();
       const food = await getFoodConsumption();
-      const points = await getTotalPoints();
       const newsUpdate = await getNewsData();
       setTotalConsumption(consumption);
       setTotalUsers(users);
@@ -59,9 +56,7 @@ export default function AppView() {
       setTrafficConsumption(traffic);
       setElectricityConsumption(electricity);
       setFoodConsumption(food);
-      setTotalPoints(points);
       setNewsData(newsUpdate);
-
       setIsDataLoaded(true);
     };
 
@@ -125,38 +120,38 @@ export default function AppView() {
             // subheader="(+43%) than last year"
             chart={{
               labels: [
-                '03/01/2023',
-                '04/01/2023',
-                '05/01/2023',
-                '06/01/2023',
-                '07/01/2023',
-                '08/01/2023',
-                '09/01/2023',
-                '10/01/2023',
-                '11/01/2023',
-                '12/01/2023',
                 '01/01/2024',
                 '02/01/2024',
+                '03/01/2024',
+                '04/01/2024',
+                '05/01/2024',
+                '06/01/2024',
+                '07/01/2024',
+                '08/01/2024',
+                '09/01/2024',
+                '10/01/2024',
+                '11/01/2024',
+                '12/01/2024',
               ],
               series: [
                 {
-                  name: 'Predict Data',
+                  name: '2024',
                   type: 'column',
                   fill: 'solid',
-                  data: [31, 23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
+                  data: [70, 109, 100, 122, 107, 93, 82, 113, 99, 80, 88, 109],
                 },
                 {
-                  name: '2023',
+                  name: 'Predictions for 2024',
                   type: 'area',
                   fill: 'gradient',
-                  data: [39, 44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+                  data: [108.899, 108.832, 108.765, 108.699, 108.632, 108.565, 108.499, 108.432, 108.365, 108.299, 108.232, 108.165],
                 },
-                {
-                  name: '2024',
-                  type: 'line',
-                  fill: 'solid',
-                  data: [30, 25,],
-                },
+                // {
+                //   name: '2024',
+                //   type: 'line',
+                //   fill: 'solid',
+                //   data: [30, 25,],
+                // },
               ],
             }}
           />
